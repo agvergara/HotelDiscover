@@ -1,0 +1,53 @@
+{% extends "base_index.html" %}
+
+{% block content %}
+	<a href="/"> -- Main Page -- </a>
+	<div>
+		<ol>
+			{% for hotel, img, date in hotels %}
+				<li>
+					<item>
+						<a href="{{hotel.web}}"> {{hotel.name}} </a><br/>
+						Added: {{date}}
+						<p> Address : Calle {{hotel.address}} </p>
+						<img src="{{img}}" alt=""><br/>
+						<a href="/alojamientos/{{hotel.id}}"> Mas informacion </a>
+					</item>
+				</li><br/>
+				-------------------------
+			{% empty %}
+				<p> Sorry, favs are empty </p>
+			{% endfor %}
+		</ol>
+	</div>
+	<div>
+		{% if user.is_authenticated %}
+		<h4> Personalize your web! </h4>
+		<form action="/saveconf/" method="Post">
+			{% csrf_token %}
+			<select name="color">
+				<option value="default">Default</option>
+				<option value="black">Black</option>
+				<option value="white">White</option>
+				<option value="beige">Beige</option>
+				<option value="aqua">Aqua</option>
+				<option value="blue">Blue</option>
+				<option value="gold">Gold</option>
+				<option value="red">Red</option>
+				<option value="green">Green</option>
+				<option value="orange">Orange</option>
+			</select>
+			<!-- Default es... No se 5? Ya lo veremos -->
+			<select name="size">
+				<option value="5">Default</option>
+				<option value="10">10px</option>
+				<option value="15">15px</option>
+				<option value="20">20px</option>
+				<option value="25">25px</option>
+			</select>
+			<input name="title" type="text" value=""></input>
+			<input type="submit" value="Send" />
+		</form>
+	{% endif %}
+	</div>
+{% endblock %}

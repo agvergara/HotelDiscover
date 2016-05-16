@@ -1,0 +1,29 @@
+{% extends "base_index.html" %}
+
+{% block content %}
+	<h1>
+			Lista 10 hoteles con mas comentarios
+		</h1>
+		<div>
+			<ol>
+				{% for hotel, img in hotels %}
+					<li>
+						<item>
+							<a href="{{hotel.web}}"> {{hotel.name}} </a>
+							<p> Address : Calle {{hotel.address}} </p>
+							<img src="{{img}}" alt=""><br/>
+							<a href="/alojamientos/{{hotel.id}}"> Mas informacion </a>
+						</item>
+					</li><br/>
+				{% endfor %}
+			</ol>
+		</div>
+		<div>
+			<h2>
+				Paginas de usuario:
+			</h2>
+			{% for user, config in users %}
+				<a href="/{{user.username}}">{{config}}</a><br/>
+			{% endfor %}
+		</div>
+{% endblock %}

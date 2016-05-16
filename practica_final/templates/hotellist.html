@@ -1,0 +1,12 @@
+{% extends "base_index.html" %}
+
+{% block content %}
+	<a href="/"> -- Main Page -- </a>
+	<ul>
+	{% for hotel, id in hotel_list %}
+		<li>
+			<a href="/alojamientos/{{id}}"><strong>{{hotel}}</strong></a>
+		</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

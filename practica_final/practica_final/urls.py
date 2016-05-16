@@ -18,6 +18,16 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^$', 'hoteles.views.index'),
-    url(r'^_\d+$', 'hoteles.views.index'),
+    url(r'^main/xml$', 'hoteles.views.mainxml'),
+    url(r'^alojamientos$', 'hoteles.views.hotellist'),
+    url(r'^alojamientos/(\d+)$', 'hoteles.views.hotel'),
     url(r'^admin/', admin.site.urls),
+    #url(r'^(.*)&page=(\d+)$', 'hoteles.views.usernextpage'),
+    url(r'^(.*)/xml$', 'hoteles.views.userxml'),
+    url(r'^login/$', 'hoteles.views.register'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    url(r'^saveconf/$', 'hoteles.views.saveconf'),
+    url(r'^addcomment/$', 'hoteles.views.addcomment'),
+    url(r'^addfav/$', 'hoteles.views.addfav'),
+    url(r'^(.*)$', 'hoteles.views.userpage'),
 ]

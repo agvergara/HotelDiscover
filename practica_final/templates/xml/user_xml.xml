@@ -1,0 +1,24 @@
+{% extends "xml/base_xml.xml" %}
+
+{% block title %}
+	{{user.username}} XML channel
+{% endblock %}
+{% block content %}
+	{% for hotel in hotels %}
+		<hotel>
+			<name>{{hotel.hotel.name}}</name>
+			<address>{{hotel.hotel.address}}</address>
+			<web>{{hotel.hotel.web}}</web>
+			<description>{{hotel.hotel.body}}</description>
+			<geoData>
+				<latitude>{{hotel.hotel.latitude}}</latitude>
+				<longitude>{{hotel.hotel.longitude}}</longitude>
+			</geoData>
+			<multimedia>
+				{% for img in imgs %}
+					<url>{{img}}</url>
+				{% endfor %}
+			</multimedia>
+		</hotel>
+	{% endfor %}
+{% endblock %}

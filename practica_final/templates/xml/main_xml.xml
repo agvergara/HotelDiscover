@@ -1,0 +1,30 @@
+{% extends "xml/base_xml.xml" %}
+{% block title %}
+	Main page XML channel
+{% endblock %}
+{% block content %}
+	{% for hotel, img in hotels %}
+	<hotel>
+		<name>{{hotel.name}}</name>
+		<address>{{hotel.address}}</address>
+		<web>{{hotel.web}}</web>
+		<multimedia>
+				<url>{{img}}</url>
+		</multimedia>
+		<moreinfo>
+			<web>{{ip}}/alojamientos/{{hotel.id}}</web>
+		</moreinfo>
+	</hotel>
+	{% endfor %}
+{% endblock %}
+
+{% block user %}
+	<userpages>
+		{%for user, config in users %}
+			<user>
+				<name>{{config}}</name>
+				<web>{{ip}}/{{user.username}}</web>
+			</user>
+		{% endfor %}
+	</userpages>
+{% endblock %}

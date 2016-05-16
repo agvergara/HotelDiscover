@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hotelList>
+	<title>
+	{% block title %}
+	{% endblock %}
+	</title>
+	{% block content %}
+	{% endblock %}
+	{% block user %}
+	{% endblock %}
+</hotelList>
+
+
