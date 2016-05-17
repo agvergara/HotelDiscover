@@ -2,12 +2,22 @@
 <!-- PONER FORMULARIO DE USER AUTENTICADO PARA DEJAR COMENTARIOS! -->
 {% block content %}
 	<a href="/"> -- Main Page -- </a>
-	<h1> {{hotel.name}} </h1> 
+	<h1> {{hotel.name}} </h1>
 	<form action="/addfav/" method="Post">
 		{% csrf_token %}
 		<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
 		<input type="submit" value="Add to my favs" />
 	</form>
+	{% if user.is_authenticated %}
+		<form action="" method="Post">
+			{% csrf_token %}
+			<select name="language">
+				<option value="English">English</option>
+				<option value="French">French</option>
+			</select>
+			<input type="submit" value="Send"/>
+		</form>
+	{% endif %}
 	<p> Address: Calle {{hotel.address}} </p>
 	<p> Description: </p>
 	<p> {{hotel.body}} </p>
@@ -33,7 +43,7 @@
 	{% if user.is_authenticated %}
 		<form action="/addcomment/" method="Post">
 			{% csrf_token %}
-			<input name="title" type="text" value="Write a title"></input>
+			<input name="title" type="text" value="Write a title" autocomplete="off"></input>
 			<textarea rows="3" cols="80" name="comment" type="text"> Write a comment </textarea>
 			<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
 			<input type="submit" value="Send"/>

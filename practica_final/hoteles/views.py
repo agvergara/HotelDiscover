@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.html import strip_tags
 from models import Hotel, Image, Comment, Config, Favourite
 from django.contrib.auth.models import User
-from django.template.loader import get_template, render_to_string
+from django.template.loader import get_template
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
@@ -12,6 +15,15 @@ from django.db.models import Count
 # Create your views here.
 
 #Functions to return some lists
+def getlanguage(language, name):
+	if language == 'English':
+		url = 'http://www.esmadrid.com/opendata/alojamientos_v1_en.xml'
+	elif language == 'French':
+		url = 'http://www.esmadrid.com/opendata/alojamientos_v1_fr.xml'
+	body = loadhotels(url, True, name)
+	return body
+
+
 def orderbycomments():
 	#Ordered by the number of comments
 	hotel_list = []
@@ -30,6 +42,21 @@ def orderbycomments():
 		config = Config.objects.get(user=user)
 		user_list += [(user, config.title)]
 	return (hotel_list, user_list)
+
+def orderbycategory(request, categoryflag, category, starsflag, stars):
+	hotel_list = []
+	hotels = Hotel.objects.all()
+	if categoryflag and starsflag:
+		pass
+	elif categoryflag: #Busca por stars
+		hotels = Hotel.objects.filter(stars=stars)
+	elif starsflag: #Busca por category
+		hotels = Hotel.objects.filter(category=category)
+	else:
+		hotels = Hotel.objects.filter(category=category).filter(stars=stars)
+	for hotel in hotels:
+		hotel_list += [(hotel.name, hotel.id)]
+	return hotel_list
 
 def favourites (user, minpage, maxpage):
 	hotel_list = []
@@ -52,12 +79,10 @@ def favourites (user, minpage, maxpage):
 def index(request):
 	hotel_list = []
 	user_list = []
-	xml_language = {'spanish' : 'es', 'english' : 'en', 'french' : 'fr'}
-	index = 'spanish'
-	url = 'http://www.esmadrid.com/opendata/alojamientos_v1_' + xml_language[index] + '.xml'
+	url = 'http://www.esmadrid.com/opendata/alojamientos_v1_es.xml'
 	hotels = Hotel.objects.all()
 	if not hotels:
-		loadhotels(url)
+		loadhotels(url, False, "")
 	(hotel_list, user_list) = orderbycomments()
 	#Getting templates
 	template = get_template('index.html')
@@ -90,9 +115,27 @@ def userpage(request, user):
 # All of the hotels!
 def hotellist(request):
 	hotel_list = []
-	hotels = Hotel.objects.all()
-	for hotel in hotels:
-		hotel_list += [(hotel.name, hotel.id)]
+	categoryflag = False
+	starsflag = False
+	stars = ""
+	category = ""
+	#Test if search by category or stars
+	try:
+		categoryflag = bool(request.POST.get('category').split('=')[1])
+	except IndexError:
+		category = request.POST.get('category')
+	except AttributeError:
+		pass
+	try:
+		starsflag = bool(request.POST.get('stars').split('=')[1])
+	except IndexError:
+		stars = request.POST.get('stars')
+	except AttributeError:
+		pass
+	if  stars == "" and category == "":
+		categoryflag = True
+		starsflag = True
+	hotel_list = orderbycategory(request, categoryflag, category, starsflag, stars)
 	template = get_template('hotellist.html')
 	context = RequestContext(request, {'hotel_list' : hotel_list})
 	return HttpResponse(template.render(context))
@@ -101,8 +144,16 @@ def hotellist(request):
 def hotel(request, identifier):
 	img_list = []
 	comment_list = []
+	language = ""
 	hotel = Hotel.objects.get(id=identifier)
 	images = Image.objects.get(hotel=hotel)
+	try:
+		language = request.POST.get('language')
+	except:
+		pass
+	print language
+	if language:
+		hotel.body = getlanguage(language, hotel.name)
 	for count in range(5):
 		try:
 			img_list += [images.url_image.split(" ")[count]]
@@ -113,7 +164,8 @@ def hotel(request, identifier):
 		if comment.hotel == hotel:
 			comment_list += [comment]
 	template = get_template('hotel_id.html')
-	context = RequestContext(request, {'hotel' : hotel, 'img_list' : img_list, 'comments' : comment_list})
+	context = RequestContext(request, {'hotel' : hotel,'hotel.body' : hotel.body,
+										'img_list' : img_list, 'comments' : comment_list})
 	return HttpResponse(template.render(context))
 
 #XML channel of an user
@@ -185,11 +237,27 @@ def mainxml (request):
 	context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list, 'ip' : ip})
 	return HttpResponse(template.render(context), content_type="text/xml")
 
-# REGISTER!
-def register(request):
-	username = request.POST.get('username')
+# authenticate user!
+def auth(request):
+	username = strip_tags(request.POST.get('username'))
 	password = request.POST.get('password')
 	user = authenticate(username=username, password=password)
 	if user is not None:
 		login(request, user)
 	return HttpResponseRedirect('/')
+
+def register(request):
+	if request.method == "GET":
+		template = get_template('registration/register.html')
+		context = RequestContext(request, {})
+		return HttpResponse(template.render(context))
+	elif request.method == "POST":
+		username = request.POST.get('username')
+		password = make_password(request.POST.get('password'))
+		title = "Pagina de " + username
+		user = User(username=username, password=password)
+		user.save()
+		user = User.objects.get(username=username)
+		config = Config(user=user, title=title, color='beige', size=10)
+		config.save()
+		return HttpResponseRedirect("/")

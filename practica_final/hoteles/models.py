@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
-
 # Create your models here.
+
 class Hotel(models.Model):
     name = models.CharField(max_length=200)
     web = models.TextField()
@@ -16,7 +16,7 @@ class Hotel(models.Model):
 		return self.name
 
 class Image(models.Model):
-	
+
     hotel = models.ForeignKey('Hotel', default="")
     url_image = models.TextField()
     def __unicode__(self):

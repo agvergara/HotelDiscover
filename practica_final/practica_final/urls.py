@@ -24,10 +24,11 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     #url(r'^(.*)&page=(\d+)$', 'hoteles.views.usernextpage'),
     url(r'^(.*)/xml$', 'hoteles.views.userxml'),
-    url(r'^login/$', 'hoteles.views.register'),
+    url(r'^login/$', 'hoteles.views.auth'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^saveconf/$', 'hoteles.views.saveconf'),
     url(r'^addcomment/$', 'hoteles.views.addcomment'),
     url(r'^addfav/$', 'hoteles.views.addfav'),
+    url(r'^register/$','hoteles.views.register'),
     url(r'^(.*)$', 'hoteles.views.userpage'),
 ]

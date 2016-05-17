@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<title>
+		Hotel Discover
+	</title>
+  <a href="/alojamientos"> -- Alojamientos --</a>
+  <a href="/about"> -- About -- </a>
+  <a href="/register/"> -- Register --</a>
+  <a href="/"> -- Main Page -- </a>
+  <h4>Register</h4>
+  <form action="" method="Post">
+		{% csrf_token %}
+				<label for="username">Name</label>
+				<input name="username" type="text" value="" autocomplete="off"/>
+				<label for="username">Password</label>
+				<input name="password" type="password" value="" />
+				<input type="submit" value="Register"/>
+  </form>
+</body>
+</html>

@@ -25,6 +25,9 @@
 	<div>
 		<a href="/alojamientos"> -- Alojamientos --</a>
 		<a href="/about"> -- About -- </a>
+		{% if not user.is_authenticated %}
+				<a href="/register/"> -- Register -- </a>
+		{% endif %}
 		{% block content %}
 		{% endblock %}
 	</div>

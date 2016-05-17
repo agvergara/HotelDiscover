@@ -11,7 +11,7 @@ import sys
 class myContentHandler(ContentHandler):
 
     def __init__ (self):
-        self.data = {'name': '', 'web': '', 'address': '', 'latitude': '', 'longitude': '', 
+        self.data = {'name': '', 'web': '', 'address': '', 'latitude': '', 'longitude': '',
                      'body': '', 'images': [], 'category': []}
         self.imagelist = []
         self.categorylist = []
@@ -93,6 +93,8 @@ class myContentHandler(ContentHandler):
             "&Oacute;" : u'Ó',
             "&Uacute;" : u'Ú',
             "&Eacute;" : u'É',
+            "&Ocirc;" : u'Ô',
+            "&ocirc;" : u"ô",
             "&uuml;" : u'ü',
             "&Uuml;" : u'Ü',
             "&nbsp;" : '\n',
@@ -101,7 +103,6 @@ class myContentHandler(ContentHandler):
             "&lsquo;" : "'",
             "&rsquo;" : "'",
         }
-        print html_escape_table
         if self.inTags:
             text = self.theContent + chars
             self.theContent = unescape(text, html_escape_table)
@@ -114,7 +115,7 @@ def getHotels(url):
     # Fill the last imagelist and categorylist, for reasons
     theHandler.data['images'] += [theHandler.imagelist]
     theHandler.data['category'] += [[theHandler.categorylist[3], theHandler.categorylist[5]]]
-    # RETURN ALL THE DATA  ヽ( ᗒ ѽ ᗕ )ﾉ 
+    # RETURN ALL THE DATA  ヽ( ᗒ ѽ ᗕ )ﾉ
     return (theHandler.data)
 
 #print getHotels('http://www.esmadrid.com/opendata/alojamientos_v1_es.xml')
