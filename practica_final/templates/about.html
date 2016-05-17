@@ -1,0 +1,37 @@
+{% extends "base_index.html" %}
+
+{% block content %}
+  <div class="suburls">
+    <a href="/"> -- Main Page -- </a>
+  </div>
+  <br/><br/>
+  <div id="about">
+    <h1> About this site </h1> <hr/>
+    <p>
+      Practica de SARO 2016, realizada por <strong>Antonio Gomez Vergara</strong>, IST.
+    <p>
+    <hr/><br/>
+    <h3> Funcionamiento </h3>
+    <p> Tenemos varios recursos que utilizaremos:
+      <h4> Funcionalidad basica: </h4>
+      <ul>
+        <li>Recurso: "/": Muestra una lista de los 10 hoteles con mas comentarios
+            y,a la derecha, las paginas de usuario disponibles</li>
+        <li>Recurso: "/alojamientos": Muestra el listado de todos los alojamientos
+            disponibles y un formulario de filtrado </li>
+        <li>Recurso: "/alojamientos/id": Siendo el id el id del hotel en cuestion,
+            muestra los datos almacenados del hotel junto con 5 fotos (o menos)</li>
+        <li>Recurso: "/usuario": Siendo "usuario" un usuario registrado, muestra
+            la pagina de ese usuario, con sus favoritos</li>
+        <li>Recurso: "/usuario/xml": Siendo "usuario" un usuario registrado, muestra
+            el canal XML de dicho usuario </li>
+        <li>Recurso: "/about": Muestra esta pagina </li>
+      </ul>
+      <h4> Funcionalidad optativa: </h4>
+      <ul>
+        <li>Recurso: "/main/xml": Muestra el canal XML de la pagina principal</li>
+        <li>Recurso: "/register": Permite dar de alta a un nuevo usuario </li>
+      </ul>
+    </p>
+  </div>
+{% endblock %}

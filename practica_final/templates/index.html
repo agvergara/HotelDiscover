@@ -1,10 +1,10 @@
 {% extends "base_index.html" %}
 
 {% block content %}
-	<h1>
-			Lista 10 hoteles con mas comentarios
-		</h1>
-		<div>
+		<div id="content">
+			<h1>
+				Lista 10 hoteles con mas comentarios
+			</h1>
 			<ol>
 				{% for hotel, img in hotels %}
 					<li>
@@ -15,15 +15,17 @@
 							<a href="/alojamientos/{{hotel.id}}"> Mas informacion </a>
 						</item>
 					</li><br/>
+				{% empty %}
+					<p> No hay hoteles con comentarios </p>
 				{% endfor %}
 			</ol>
 		</div>
-		<div>
+		<div id="userpages">
 			<h2>
 				Paginas de usuario:
 			</h2>
 			{% for user, config in users %}
-				<a href="/{{user.username}}">{{config}}</a><br/>
+				<a href="/{{user.username}}">{{config}}</a> - {{user.username}}<br/>
 			{% endfor %}
 		</div>
 {% endblock %}

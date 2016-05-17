@@ -1,0 +1,130 @@
+
+.banner {
+  border: 1px solid black;
+  height: 150px;
+  width: 1175px;
+  float:left;
+  position: relative;
+}
+
+.wrapper{
+  /*border: 1px solid green;*/
+  padding-top: 170px;
+}
+
+.urls{
+  border: 1px solid black;
+  width: auto;
+  position: absolute;
+  clear: both;
+  display: inline-block;
+  text-align: center;
+  float: left;
+  left: 35%;
+}
+
+.suburls{
+  border: 1px solid black;
+  width: auto;
+  display: inline-block;
+  clear:both;
+  text-align: center;
+  position: relative;
+  float:left;
+  left: 28.5%;
+}
+
+.loginwrp {
+  height: 150px;
+  width: 250px;
+  border: 1px solid black;
+  float: right;
+  position: relative;
+}
+
+.center{
+  text-align: center;
+}
+
+#login{
+  vertical-align: top;
+  display: inline-block;
+  position: relative;
+  left: 27px;
+  top: 40px;
+}
+
+#passwd{
+  position: relative;
+  display: inline-block;
+  clear: both;
+  text-align: center;
+  top: 40px;
+}
+
+#loginbutton{
+  top: 45px;
+  right: 5px;
+  position: relative;
+  float: right;
+}
+
+#register{
+  width: auto;
+  display: inline-block;
+  position: relative;
+  top: 30px;
+}
+
+#main{
+  position: relative;
+}
+
+#content{
+  border: 1px solid black;
+  display: inline-block;
+  position: relative;
+  top: 35px;
+  left: 8%;
+  clear: both;
+}
+
+#hotellist{
+  position: relative;
+  border: 1px solid black;
+  display: inline-block;
+  display: inline-block;
+  left: 29.5%;
+}
+
+#hotelid{
+  border: 1px solid black;
+  position: relative;
+}
+
+#hotelid h1{
+  text-align: center;
+}
+
+#images{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#about{
+  position: relative;
+  border: 1px solid black;
+  display: inline-block;
+  display: inline-block;
+  left: 10%;
+}
+
+#userpages{
+  border: 1px solid black;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  top: 35px;
+  float: right;
+}

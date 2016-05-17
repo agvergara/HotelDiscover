@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from loaddata import loadhotels
 from django.db.models import Count
+import math
 # Create your views here.
 
 #Functions to return some lists
@@ -60,18 +61,30 @@ def orderbycategory(request, categoryflag, category, starsflag, stars):
 
 def favourites (user, minpage, maxpage):
 	hotel_list = []
-	count = minpage
 	user = User.objects.get(username=user)
 	favourites = Favourite.objects.all()
 	for fav in favourites:
 		if fav.user == user:
-			if count < maxpage:
-				image = Image.objects.get(hotel=fav.hotel)
-				url = image.url_image.split(" ")[0]
-				hotel_list += [(fav.hotel, url, fav.date)]
-			else:
-				count += 1
+			if minpage < maxpage:
+				try:
+					image = Image.objects.get(hotel=favourites[minpage].hotel)
+					url = image.url_image.split(" ")[0]
+					hotel_list += [(favourites[minpage].hotel, url, favourites[minpage].date)]
+				except IndexError:
+					break
+				minpage += 1
 	return (hotel_list, user)
+
+def manypages(user):
+	num_list = []
+	num_favs = Favourite.objects.filter(user=user).count()
+	max_pg = math.ceil((num_favs/10.0))
+	if max_pg.is_integer():
+		max_pg += 1
+		max_pg = int(max_pg)
+	for num in range(max_pg):
+		num_list += [num + 1]
+	return (num_list, num_favs)
 
 # REAL VIEWS.PY
 
@@ -92,25 +105,35 @@ def index(request):
 # Page of an user
 def userpage(request, user):
 	hotel_list = []
+	num_list = []
 	try:
 		(hotel_list, user) = favourites(user, 0, 10)
 	except ObjectDoesNotExist:
 		return HttpResponse(user + " does not exist")
-	context = RequestContext(request, {'hotels' : hotel_list})
+	usr = User.objects.get(username=user)
+	(num_list, num_favs) = manypages(usr)
+	context = RequestContext(request, {'hotels' : hotel_list, 'usr' : usr.username,
+										'num_favs' : num_favs, 'max_pg' : num_list})
 	template = get_template('userfavs.html')
 	return HttpResponse(template.render(context))
 
-"""def usernextpage(request, user, page):
-	maxpage = 10 * page
-	minpage = maxpage - 9
+def usernextpage(request, user, page):
+	maxpage = 10 * int(page)
+	minpage = maxpage - 10
 	hotel_list = []
+	num_list = []
+	if page == "1":
+		return HttpResponseRedirect("/" + user)
 	try:
-		hotel_list = favourites(user, minpage, maxpage)
+		(hotel_list, user) = favourites(user, minpage, maxpage)
 	except ObjectDoesNotExist:
 		return HttpResponse("La has cagao")
+	usr = User.objects.get(username=user)
+	(num_list, num_favs) = manypages(usr)
 	template = get_template('userfavs.html')
-	context = RequestContext(request, {'hotels' : hotel_list})
-	return HttpResponse(template.render(context))"""
+	context = RequestContext(request, {'hotels' : hotel_list, 'usr' : usr.username,
+										'num_favs' : num_favs, 'max_pg' : num_list})
+	return HttpResponse(template.render(context))
 
 # All of the hotels!
 def hotellist(request):
@@ -226,6 +249,19 @@ def addfav (request):
 	favourite.save()
 	return HttpResponseRedirect("/alojamientos/"+str(hotel.id))
 
+def about(request):
+	template = get_template('about.html')
+	user = request.user.username
+	if request.user.is_authenticated():
+		user = User.objects.get(username=user)
+	context = RequestContext(request, {'user' : user})
+	return HttpResponse(template.render(context))
+
+#CSS serving here
+def servecss(request):
+	template = get_template('css/index.css')
+	return HttpResponse(template.render(), content_type="text/css")
+
 # OPTIONAL HERE!
 # Main page xml channel
 def mainxml (request):
@@ -261,3 +297,13 @@ def register(request):
 		config = Config(user=user, title=title, color='beige', size=10)
 		config.save()
 		return HttpResponseRedirect("/")
+
+def mainrss(request):
+	hotel_list = []
+	user_list = []
+	ip = request.get_host()
+	(hotel_list, user_list) = orderbycomments()
+	template = get_template('rss/indexrss.rss')
+	context = RequestContext(request, {'hotels' : hotel_list, 'ip' : ip,
+										'users' : user_list})
+	return HttpResponse(template.render(context))

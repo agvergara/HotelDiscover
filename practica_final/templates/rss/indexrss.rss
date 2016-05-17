@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+      <title>
+         Main page RSS channel
+      </title>
+      {% for hotel, img in hotels %}
+          <item>
+            <title>{{ hotel.name }}</title>
+            <link>{{ hotel.web }}</link>
+            <description>Address: Calle {{ hotel.address }}</description>
+          </item>
+          <item>
+            <title> Mas informacion </title>
+            <link> http://{{ip}}/alojamientos/{{hotel.id}}</link>
+            <category/>
+          </item>
+          <img>{{img}}</img>
+      {% endfor %}
+      <item>
+        <title>Paginas de usuario:</title>
+      </item>
+      {% for user, config in users %}
+          <item>
+              <title>{{config}}</title>
+              <link>http://{{ip}}/{{ user.username }}</link>
+          </item>
+      {% endfor %}
+    </channel>
+</rss>

@@ -19,10 +19,11 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^$', 'hoteles.views.index'),
     url(r'^main/xml$', 'hoteles.views.mainxml'),
+    url(r'^main/rss$', 'hoteles.views.mainrss'),
     url(r'^alojamientos$', 'hoteles.views.hotellist'),
     url(r'^alojamientos/(\d+)$', 'hoteles.views.hotel'),
     url(r'^admin/', admin.site.urls),
-    #url(r'^(.*)&page=(\d+)$', 'hoteles.views.usernextpage'),
+    url(r'^(.*)_page=(\d+)$', 'hoteles.views.usernextpage'),
     url(r'^(.*)/xml$', 'hoteles.views.userxml'),
     url(r'^login/$', 'hoteles.views.auth'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
@@ -30,5 +31,7 @@ urlpatterns = [
     url(r'^addcomment/$', 'hoteles.views.addcomment'),
     url(r'^addfav/$', 'hoteles.views.addfav'),
     url(r'^register/$','hoteles.views.register'),
+    url(r'^about$', 'hoteles.views.about'),
+    url(r'^css/index.css$', 'hoteles.views.servecss'),
     url(r'^(.*)$', 'hoteles.views.userpage'),
 ]

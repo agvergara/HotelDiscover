@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/index.css" />
+</head>
 <body>
 	<title>
 		Hotel Discover
 	</title>
-	<div>
-		{% if user.is_authenticated %}
-			<h4>Bienvenido {{user.username}}</h4>
-			<a href="/{{user.username}}">Mi Pagina</a>
-			<a href="/{{user.username}}/xml">Canal XML</a>
-			<a href="/logout/">Cerrar sesión</a>
-		{% else %}
-			<h4>Login</h4>
-			<form action="/login/" method="Post">
-				{% csrf_token %}
-					<label for="username">Name</label>
-					<input name="username" type="text" value="" />
-					<label for="username">Password</label>
-					<input name="password" type="password" value="" />
-					<input type="submit" value="Login" />
-			</form>
-		{% endif %}
-	</div>
-	<div>
-		<a href="/alojamientos"> -- Alojamientos --</a>
-		<a href="/about"> -- About -- </a>
-		{% if not user.is_authenticated %}
-				<a href="/register/"> -- Register -- </a>
-		{% endif %}
-		{% block content %}
-		{% endblock %}
-	</div>
+			<div class="loginwrp">
+				{% if user.is_authenticated %}
+					<h4>Bienvenido {{user.username}}</h4>
+					<a href="/{{user.username}}">Mi Pagina</a>
+					<a href="/{{user.username}}/xml">Canal XML</a>
+					<a href="/logout/">Cerrar sesión</a>
+				{% else %}
+					<form action="/login/" method="Post">
+						{% csrf_token %}
+						<div id="login">
+							<label for="username">Name</label>
+							<input name="username" type="text" value="" />
+						</div>
+						<div id="passwd">
+							<label for="username">Password</label>
+							<input name="password" type="password" value="" />
+						</div>
+							<input type="submit" value="Login" id="loginbutton"/>
+					</form>
+				{% endif %}
+			</div>
+		<div class="banner">
+			Banner.jpg
+		</div>
+		<div class="wrapper">
+			<div class="urls">
+				<a href="/main/xml"> -- Main XML -- </a>
+				<a href="/main/rss"> -- Main RSS -- </a>
+				<a href="/alojamientos"> -- Alojamientos --</a>
+				<a href="/about"> -- About -- </a>
+				{% if not user.is_authenticated %}
+						<a href="/register/"> -- Register -- </a>
+				{% endif %}
+			</div>
+			{% block content %}
+			{% endblock %}
+		</div>
 </body>
 </html>

@@ -1,52 +1,61 @@
 {% extends "base_index.html" %}
 <!-- PONER FORMULARIO DE USER AUTENTICADO PARA DEJAR COMENTARIOS! -->
 {% block content %}
-	<a href="/"> -- Main Page -- </a>
-	<h1> {{hotel.name}} </h1>
-	<form action="/addfav/" method="Post">
-		{% csrf_token %}
-		<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
-		<input type="submit" value="Add to my favs" />
-	</form>
-	{% if user.is_authenticated %}
-		<form action="" method="Post">
-			{% csrf_token %}
-			<select name="language">
-				<option value="English">English</option>
-				<option value="French">French</option>
-			</select>
-			<input type="submit" value="Send"/>
-		</form>
-	{% endif %}
-	<p> Address: Calle {{hotel.address}} </p>
-	<p> Description: </p>
-	<p> {{hotel.body}} </p>
-	<p> Category and stars: </p>
-	<p> {{hotel.category}}, {{hotel.stars}} </p>
-	<a href="{{hotel.web}}"> Web page </a><br/>
-	<p> Latitude: {{hotel.latitude}} ; Longitude: {{hotel.longitude}} </p>
-	<div>
-		<h4> Imagenes: </h4>
-		{% for img in img_list %}
-			<img src="{{img}}" alt="">
-		{% endfor %}
+	<div class="suburls">
+		<a href="/"> -- Main Page -- </a>
 	</div>
-	<div>
-		<h4> Comments: </h4>
-		{% for comment in comments %}
-		<!-- Ya se que los comentarios son anonimos -->
-			<p> By: {{comment.user}} </p>
-			<p> {{comment.date}} - {{comment.title}}</p>
-			<p> {{comment.comment}} </p>
-		{% endfor %}
-	</div>
-	{% if user.is_authenticated %}
-		<form action="/addcomment/" method="Post">
-			{% csrf_token %}
-			<input name="title" type="text" value="Write a title" autocomplete="off"></input>
-			<textarea rows="3" cols="80" name="comment" type="text"> Write a comment </textarea>
-			<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
-			<input type="submit" value="Send"/>
-		</form>
-	{% endif %}
+	<br/><br/>
+	<div id="hotelid">
+		<h1> {{hotel.name}} </h1>
+		<div class="center">
+			{% if user.is_authenticated %}
+				<form action="/addfav/" method="Post">
+					{% csrf_token %}
+					<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
+					<input type="submit" value="Add to my favs" />
+				</form>
+				{% endif %}
+		</div>
+		{% if user.is_authenticated %}
+			<form action="" method="Post">
+				{% csrf_token %}
+				<select name="language">
+					<option value="English">English</option>
+					<option value="French">French</option>
+				</select>
+				<input type="submit" value="Send"/>
+			</form>
+		{% endif %}
+		<p> Address: Calle {{hotel.address}} </p>
+		<p> Description: </p>
+		<p> {{hotel.body}} </p>
+		<p> Category and stars: </p>
+		<p> {{hotel.category}}, {{hotel.stars}} </p>
+		<a href="{{hotel.web}}"> Web page </a><br/>
+		<p> Latitude: {{hotel.latitude}} ; Longitude: {{hotel.longitude}} </p>
+		<div>
+			<h4 class="center"><strong> Imagenes: </strong></h4>
+			{% for img in img_list %}
+				<img src="{{img}}" alt="" id="images" />
+			{% endfor %}
+		</div>
+		<div>
+			<h4><strong> Comments: </strong></h4>
+			{% for comment in comments %}
+			<!-- Ya se que los comentarios son anonimos -->
+				<p> By: {{comment.user}} </p>
+				<p> {{comment.date}} - {{comment.title}}</p>
+				<p> {{comment.comment}} </p>
+			{% endfor %}
+		</div>
+		{% if user.is_authenticated %}
+			<form action="/addcomment/" method="Post">
+				{% csrf_token %}
+				<input name="title" type="text" value="Write a title" autocomplete="off"></input>
+				<textarea rows="3" cols="80" name="comment" type="text"> Write a comment </textarea>
+				<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
+				<input type="submit" value="Send"/>
+			</form>
+		{% endif %}
+</div>
 {% endblock %}

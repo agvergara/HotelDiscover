@@ -1,40 +1,45 @@
 {% extends "base_index.html" %}
 
 {% block content %}
-	<a href="/"> -- Main Page -- </a>
-	<form action="" method="Post">
-		{% csrf_token %}
-		<select name="stars">
-			<option value="stars=True">-----</option>
-				<optgroup label="Hoteles/Hostales">
-					<option value="1 estrella">1 Estrella</option>
-					<option value="2 estrellas">2 Estrellas</option>
-					<option value="3 estrellas">3 Estrellas</option>
-					<option value="4 estrellas">4 Estrellas</option>
-					<option value="5 estrellas">5 Estrellas</option>
-					<option value="5 estrellas Gran Lujo">5 estrellas Gran Lujo</option>
-				</optgroup>
-				<optgroup label="Apartahoteles">
-					<option value="1 llave">1 llave</option>
-					<option value="2 llaves">2 llaves</option>
-					<option value="3 llaves">3 llaves</option>
-					<option value="4 llaves">4 llaves</option>
-					<option value="5 llaves">5 llaves</option>
-				</optgroup>
-		</select>
-		<select name="category">
-			<option value="category=True">-----</option>
-			<option value="Hoteles">Hoteles</option>
-			<option value="Apartahoteles">Apartahoteles</option>
-			<option value="Hostales">Hostales</option>
-			<option value="Residencias universitarias">Residencias universitarias</option>
-		</select>
-		<input type="submit" value="Search" />
-	<ul>
-	{% for hotel, id in hotel_list %}
-		<li>
-			<a href="/alojamientos/{{id}}"><strong>{{hotel}}</strong></a>
-		</li>
-	{% endfor %}
-	</ul>
+	<div class="suburls">
+		<a href="/"> -- Main Page -- </a>
+	</div>
+	<br/><br/>
+	<div id="hotellist">
+		<form action="" method="Post">
+			{% csrf_token %}
+			<select name="stars">
+				<option value="stars=True">-----</option>
+					<optgroup label="Hoteles/Hostales">
+						<option value="1 estrella">1 Estrella</option>
+						<option value="2 estrellas">2 Estrellas</option>
+						<option value="3 estrellas">3 Estrellas</option>
+						<option value="4 estrellas">4 Estrellas</option>
+						<option value="5 estrellas">5 Estrellas</option>
+						<option value="5 estrellas Gran Lujo">5 estrellas Gran Lujo</option>
+					</optgroup>
+					<optgroup label="Apartahoteles">
+						<option value="1 llave">1 llave</option>
+						<option value="2 llaves">2 llaves</option>
+						<option value="3 llaves">3 llaves</option>
+						<option value="4 llaves">4 llaves</option>
+						<option value="5 llaves">5 llaves</option>
+					</optgroup>
+			</select>
+			<select name="category">
+				<option value="category=True">-----</option>
+				<option value="Hoteles">Hoteles</option>
+				<option value="Apartahoteles">Apartahoteles</option>
+				<option value="Hostales">Hostales</option>
+				<option value="Residencias universitarias">Residencias universitarias</option>
+			</select>
+			<input type="submit" value="Search" />
+		<ul>
+		{% for hotel, id in hotel_list %}
+			<li>
+				<a href="/alojamientos/{{id}}"><strong>{{hotel}}</strong></a>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
 {% endblock %}
