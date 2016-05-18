@@ -1,10 +1,6 @@
 {% extends "base_index.html" %}
 <!-- PONER FORMULARIO DE USER AUTENTICADO PARA DEJAR COMENTARIOS! -->
 {% block content %}
-	<div class="suburls">
-		<a href="/"> -- Main Page -- </a>
-	</div>
-	<br/><br/>
 	<div id="hotelid">
 		<h1> {{hotel.name}} </h1>
 		<div class="center">
@@ -23,38 +19,44 @@
 					<option value="English">English</option>
 					<option value="French">French</option>
 				</select>
-				<input type="submit" value="Send"/>
+				<input class="submitbutton "type="submit" value="Send"/>
 			</form>
 		{% endif %}
-		<p> Address: Calle {{hotel.address}} </p>
-		<p> Description: </p>
+		<br/>
+		<p> <strong>Address:</strong> Calle {{hotel.address}} </p>
+		<p> <strong>Description:</strong> </p>
 		<p> {{hotel.body}} </p>
-		<p> Category and stars: </p>
+		<p> <strong>Category and stars:</strong> </p>
 		<p> {{hotel.category}}, {{hotel.stars}} </p>
-		<a href="{{hotel.web}}"> Web page </a><br/>
+		<a href="{{hotel.web}}"> <strong>Web page</strong> </a><br/>
 		<p> Latitude: {{hotel.latitude}} ; Longitude: {{hotel.longitude}} </p>
-		<div>
-			<h4 class="center"><strong> Imagenes: </strong></h4>
-			{% for img in img_list %}
-				<img src="{{img}}" alt="" id="images" />
+		<h4 class="center"><strong> Imagenes:</strong></h4>
+		<div class="slider">
+			{% for img, num in img_list %}
+				<input type="radio" name="slide_switch" id="id{{num}}" checked="checked"/>
+				<label for="id{{num}}">
+					<img src="{{img}}" alt="" width="100"/>
+				</label>
+				<img src="{{img}}" alt="" />
 			{% endfor %}
 		</div>
+		<br/><br/><br/><br/><br/>
 		<div>
-			<h4><strong> Comments: </strong></h4>
+			<h4><strong> Comentarios: </strong></h4>
 			{% for comment in comments %}
-			<!-- Ya se que los comentarios son anonimos -->
-				<p> By: {{comment.user}} </p>
-				<p> {{comment.date}} - {{comment.title}}</p>
+				<p> <strong>{{comment.title}}</strong> - {{comment.date}}</p>
 				<p> {{comment.comment}} </p>
+				<hr>
 			{% endfor %}
 		</div>
 		{% if user.is_authenticated %}
+			<h4><strong>Deja un comentario:</strong></h4>
 			<form action="/addcomment/" method="Post">
 				{% csrf_token %}
 				<input name="title" type="text" value="Write a title" autocomplete="off"></input>
-				<textarea rows="3" cols="80" name="comment" type="text"> Write a comment </textarea>
+				<textarea rows="3" cols="80" name="comment" type="text"> Escribe aqui... </textarea>
 				<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
-				<input type="submit" value="Send"/>
+				<input class="submitbutton" type="submit" value="Enviar"/>
 			</form>
 		{% endif %}
 </div>

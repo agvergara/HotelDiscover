@@ -4,7 +4,7 @@
 	{{user.username}} XML channel
 {% endblock %}
 {% block content %}
-	{% for hotel in hotels %}
+	{% for hotel, imgs in hotels %}
 		<hotel>
 			<name>{{hotel.hotel.name}}</name>
 			<address>{{hotel.hotel.address}}</address>

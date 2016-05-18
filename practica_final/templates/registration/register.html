@@ -9,27 +9,33 @@
 	<title>
 		Hotel Discover
 	</title>
-	<div class="banner">
-		Banner.jpg
-	</div>
-	<div class="wrapper">
+	<div class="page-header">
+		<div class="banner">
+			Banner.jpg
+		</div>
 		<div class="urls">
-			<a href="/"> -- Main Page -- </a>
-		  <a href="/alojamientos"> -- Alojamientos --</a>
-		  <a href="/about"> -- About -- </a>
-		  <a href="/register/"> -- Register --</a>	  
-		</div>
-		<div id="register">
-		  <h4>Register</h4>
-		  <form action="" method="Post">
-				{% csrf_token %}
-						<label for="username">Name</label>
-						<input name="username" type="text" value="" autocomplete="off"/>
-						<label for="username">Password</label>
-						<input name="password" type="password" value="" />
-						<input type="submit" value="Register"/>
-		  </form>
-		</div>
+			{% if request.path != '/' %}
+				<a href="/"><button class="buttonstyle">Main Page</button></a>
+			{% endif %}
+			<a href="/alojamientos"><button class="buttonstyle"> Alojamientos </button></a>
+			<a href="/about"><button class="buttonstyle"> About </button></a>
+			<a href="/main/xml"><button class="buttonstyle">Main XML </button></a>
+			<a href="/main/rss"><button class="buttonstyle"> Main RSS </button></a>
+			{% if not user.is_authenticated %}
+				<a href="/register/"><button class="buttonstyle"> Register </button></a>
+			{% endif %}
+			</div>
+	</div>
+	<div id="register">
+	  <h4>Register</h4>
+	  <form action="" method="Post">
+			{% csrf_token %}
+				<label for="username">Name</label>
+				<input name="username" type="text" value="" autocomplete="off"/>
+				<label for="username">Password</label>
+				<input name="password" type="password" value="" />
+				<input type="submit" value="Register"/>
+	  </form>
 	</div>
 </body>
 </html>

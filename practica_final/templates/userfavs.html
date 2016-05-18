@@ -1,46 +1,43 @@
 {% extends "base_index.html" %}
 
 {% block content %}
-	<div class="suburls">
-		<a href="/"> -- Main Page -- </a>
-	<div>
-	<br/><br/>
-	<div>
+	<div class="content">
 		<ol>
 			{% for hotel, img, date in hotels %}
 				<li>
 					<item>
-						<a href="{{hotel.web}}"> {{hotel.name}} </a><br/>
-						Added: {{date}}
-						<p> Address : Calle {{hotel.address}} </p>
+						<a href="{{hotel.web}}"><strong> {{hotel.name}} </strong></a><br/>
+						<strong>Added: </strong>{{date}}
+						<p><strong> Address : </strong>Calle {{hotel.address}} </p>
 						<img src="{{img}}" alt=""><br/>
-						<a href="/alojamientos/{{hotel.id}}"> Mas informacion </a>
+						<a href="/alojamientos/{{hotel.id}}"><strong> Mas informacion </strong></a>
 					</item>
 				</li><br/>
-				-------------------------
+				<hr/>
 			{% empty %}
 				<p> Sorry, favs are empty </p>
 			{% endfor %}
 			<br/>
 			{% if num_favs > 10 %}
-				Pages:
-				{% for num in max_pg %}
-					<a href="/{{user.username}}_page={{num}}">{{num}}</a>
-				{% endfor %}
+				<div id="pages">
+					<strong>Pages:</strong>
+					{% for num in max_pg %}
+						<a href="/{{username}}_page={{num}}"><button>{{num}}</button></a>
+					{% endfor %}
+				</div>
 			{% endif %}
 		</ol>
 	</div>
-	<div>
+	<div id="personalize">
 		{% if user.is_authenticated %}
-			{% if usr == user.username %}
-				<h4> Personalize your web! </h4>
+			{% if username == user.username %}
+				<h4> Personalizatu pagina! </h4>
 				<form action="/saveconf/" method="Post">
 					{% csrf_token %}
 					<select name="color">
-						<option value="default">Default</option>
+						<option value="beige">Default</option>
 						<option value="black">Black</option>
 						<option value="white">White</option>
-						<option value="beige">Beige</option>
 						<option value="aqua">Aqua</option>
 						<option value="blue">Blue</option>
 						<option value="gold">Gold</option>
@@ -48,9 +45,8 @@
 						<option value="green">Green</option>
 						<option value="orange">Orange</option>
 					</select>
-					<!-- Default es... No se 5? Ya lo veremos -->
 					<select name="size">
-						<option value="5">Default</option>
+						<option value="14">Default</option>
 						<option value="10">10px</option>
 						<option value="15">15px</option>
 						<option value="20">20px</option>

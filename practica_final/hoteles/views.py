@@ -10,12 +10,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
-from loaddata import loadhotels
+from loaddata import loadhotels, orderbycomments, orderbycategory, favourites, manypages
 from django.db.models import Count
 import math
 # Create your views here.
 
 #Functions to return some lists
+
 def getlanguage(language, name):
 	if language == 'English':
 		url = 'http://www.esmadrid.com/opendata/alojamientos_v1_en.xml'
@@ -23,68 +24,6 @@ def getlanguage(language, name):
 		url = 'http://www.esmadrid.com/opendata/alojamientos_v1_fr.xml'
 	body = loadhotels(url, True, name)
 	return body
-
-
-def orderbycomments():
-	#Ordered by the number of comments
-	hotel_list = []
-	user_list = []
-	comments = Hotel.objects.annotate(quantity=Count('comment')).order_by('-quantity')
-	if comments[0].quantity > 0:
-		for count in range(10):
-			if comments[count].quantity > 0:
-				hotel = Hotel.objects.get(name=comments[count])
-				image = Image.objects.get(hotel=hotel)
-				url = image.url_image.split(" ")[0]
-				hotel_list += [(hotel, url)]
-	#Load user pages
-	users = User.objects.all()
-	for user in users:
-		config = Config.objects.get(user=user)
-		user_list += [(user, config.title)]
-	return (hotel_list, user_list)
-
-def orderbycategory(request, categoryflag, category, starsflag, stars):
-	hotel_list = []
-	hotels = Hotel.objects.all()
-	if categoryflag and starsflag:
-		pass
-	elif categoryflag: #Busca por stars
-		hotels = Hotel.objects.filter(stars=stars)
-	elif starsflag: #Busca por category
-		hotels = Hotel.objects.filter(category=category)
-	else:
-		hotels = Hotel.objects.filter(category=category).filter(stars=stars)
-	for hotel in hotels:
-		hotel_list += [(hotel.name, hotel.id)]
-	return hotel_list
-
-def favourites (user, minpage, maxpage):
-	hotel_list = []
-	user = User.objects.get(username=user)
-	favourites = Favourite.objects.all()
-	for fav in favourites:
-		if fav.user == user:
-			if minpage < maxpage:
-				try:
-					image = Image.objects.get(hotel=favourites[minpage].hotel)
-					url = image.url_image.split(" ")[0]
-					hotel_list += [(favourites[minpage].hotel, url, favourites[minpage].date)]
-				except IndexError:
-					break
-				minpage += 1
-	return (hotel_list, user)
-
-def manypages(user):
-	num_list = []
-	num_favs = Favourite.objects.filter(user=user).count()
-	max_pg = math.ceil((num_favs/10.0))
-	if max_pg.is_integer():
-		max_pg += 1
-		max_pg = int(max_pg)
-	for num in range(max_pg):
-		num_list += [num + 1]
-	return (num_list, num_favs)
 
 # REAL VIEWS.PY
 
@@ -103,35 +42,35 @@ def index(request):
 	return HttpResponse(template.render(context))
 
 # Page of an user
-def userpage(request, user):
+def userpage(request, username):
 	hotel_list = []
 	num_list = []
 	try:
-		(hotel_list, user) = favourites(user, 0, 10)
+		(hotel_list, user) = favourites(username, 0, 10)
 	except ObjectDoesNotExist:
-		return HttpResponse(user + " does not exist")
-	usr = User.objects.get(username=user)
+		return HttpResponse(username + " does not exist")
+	usr = User.objects.get(username=username)
 	(num_list, num_favs) = manypages(usr)
-	context = RequestContext(request, {'hotels' : hotel_list, 'usr' : usr.username,
+	context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
 										'num_favs' : num_favs, 'max_pg' : num_list})
 	template = get_template('userfavs.html')
 	return HttpResponse(template.render(context))
 
-def usernextpage(request, user, page):
+def usernextpage(request, username, page):
 	maxpage = 10 * int(page)
 	minpage = maxpage - 10
 	hotel_list = []
 	num_list = []
 	if page == "1":
-		return HttpResponseRedirect("/" + user)
+		return HttpResponseRedirect("/" + username)
 	try:
-		(hotel_list, user) = favourites(user, minpage, maxpage)
+		(hotel_list, user) = favourites(username, minpage, maxpage)
 	except ObjectDoesNotExist:
 		return HttpResponse("La has cagao")
-	usr = User.objects.get(username=user)
+	usr = User.objects.get(username=username)
 	(num_list, num_favs) = manypages(usr)
 	template = get_template('userfavs.html')
-	context = RequestContext(request, {'hotels' : hotel_list, 'usr' : usr.username,
+	context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
 										'num_favs' : num_favs, 'max_pg' : num_list})
 	return HttpResponse(template.render(context))
 
@@ -174,12 +113,11 @@ def hotel(request, identifier):
 		language = request.POST.get('language')
 	except:
 		pass
-	print language
 	if language:
 		hotel.body = getlanguage(language, hotel.name)
 	for count in range(5):
 		try:
-			img_list += [images.url_image.split(" ")[count]]
+			img_list += [(images.url_image.split(" ")[count], count+1)]
 		except IndexError:
 			pass
 	comments = Comment.objects.all()
@@ -200,14 +138,13 @@ def userxml (request, user):
 		user = User.objects.get(username=user)
 	except ObjectDoesNotExist:
 		return HttpResponse("Does not exists")
-	favs = Favourite.objects.all()
+	favs = Favourite.objects.filter(user=user)
 	for fav in favs:
-		if fav.user == user:
-			image = Image.objects.get(hotel=fav.hotel)
-			img_list += image.url_image.split(" ")
-			fav_list += [fav]
+		image = Image.objects.get(hotel=fav.hotel)
+		img_list = image.url_image.split(" ")
+		fav_list += [(fav, img_list)]
 	template = get_template('xml/user_xml.xml')
-	context = RequestContext(request, {'hotels' : fav_list, 'imgs' : img_list})
+	context = RequestContext(request, {'hotels' : fav_list})
 	return HttpResponse(template.render(context), content_type="text/xml")
 
 #Config section!
@@ -215,7 +152,7 @@ def saveconf(request):
 	user = request.user.username
 	color = request.POST.get('color')
 	size = request.POST.get('size')
-	if request.POST.get('title') is not None:
+	if request.POST.get('title') is not None and request.POST.get('title') != "":
 		title = strip_tags(request.POST.get('title'))
 	else:
 		title = "Pagina de " + user
@@ -259,8 +196,17 @@ def about(request):
 
 #CSS serving here
 def servecss(request):
+	color = 'beige'
+	size = 14
 	template = get_template('css/index.css')
-	return HttpResponse(template.render(), content_type="text/css")
+	if request.user.is_authenticated():
+		user = request.user.username
+		user = User.objects.get(username=user)
+		config = Config.objects.get(user=user)
+		color = config.color
+		size = config.size
+	context = RequestContext(request, {'color' : color, 'size' : size})
+	return HttpResponse(template.render(context), content_type="text/css")
 
 # OPTIONAL HERE!
 # Main page xml channel

@@ -1,23 +1,27 @@
 {% extends "base_index.html" %}
 
 {% block content %}
-		<div id="content">
+		<div class="content">
 			<h1>
 				Lista 10 hoteles con mas comentarios
 			</h1>
 			<ol>
 				{% for hotel, img in hotels %}
-					<li>
-						<item>
-							<a href="{{hotel.web}}"> {{hotel.name}} </a>
-							<p> Address : Calle {{hotel.address}} </p>
-							<img src="{{img}}" alt=""><br/>
-							<a href="/alojamientos/{{hotel.id}}"> Mas informacion </a>
-						</item>
-					</li><br/>
-				{% empty %}
-					<p> No hay hoteles con comentarios </p>
-				{% endfor %}
+					<div class="hotelwrp">
+						<li>
+							<item>
+								<div class="hotel">
+									<a href="{{hotel.web}}"><strong> {{hotel.name}} </strong></a>
+									<p><strong> Address : </strong> Calle {{hotel.address}} </p>
+									<a href="/alojamientos/{{hotel.id}}"><strong> Mas informacion</strong></a>
+								</div>
+								<img src="{{img}}" alt="" class="imgresize"><br/>
+							</item>
+						</li><hr><br/>
+					</div>
+					{% empty %}
+						<p> No hay hoteles con comentarios </p>
+					{% endfor %}
 			</ol>
 		</div>
 		<div id="userpages">
@@ -25,7 +29,7 @@
 				Paginas de usuario:
 			</h2>
 			{% for user, config in users %}
-				<a href="/{{user.username}}">{{config}}</a> - {{user.username}}<br/>
+				<a href="/{{user.username}}"><strong>{{config}}</strong></a> - {{user.username}}<br/>
 			{% endfor %}
 		</div>
 {% endblock %}
