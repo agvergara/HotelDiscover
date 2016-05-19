@@ -8,7 +8,7 @@
 				<form action="/addfav/" method="Post">
 					{% csrf_token %}
 					<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
-					<input type="submit" value="Add to my favs" />
+					<input class="submitbutton" type="submit" value="Añadir a favoritos" />
 				</form>
 				{% endif %}
 		</div>
@@ -19,7 +19,7 @@
 					<option value="English">English</option>
 					<option value="French">French</option>
 				</select>
-				<input class="submitbutton "type="submit" value="Send"/>
+				<input type="submit" value="Enviar"/>
 			</form>
 		{% endif %}
 		<br/>
@@ -41,23 +41,30 @@
 			{% endfor %}
 		</div>
 		<br/><br/><br/><br/><br/>
-		<div>
-			<h4><strong> Comentarios: </strong></h4>
+		<hr class="separator">
+		<div id="comentarios">
+			<h3><strong> Comentarios: </strong></h4>
 			{% for comment in comments %}
 				<p> <strong>{{comment.title}}</strong> - {{comment.date}}</p>
 				<p> {{comment.comment}} </p>
 				<hr>
 			{% endfor %}
+			{% if user.is_authenticated %}
+				<h3><strong>Deja un comentario:</strong></h4>
+				<form action="/addcomment/" method="Post">
+					{% csrf_token %}
+					<div>
+						<input name="title" type="text" value="Titulo" autocomplete="off"></input>
+					</div>
+					<div>
+						<textarea rows="3" cols="80" name="comment" type="text"> Escribe aqui... </textarea>
+					</div>
+					<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
+					<div>
+						<input class="submitbutton" type="submit" value="Enviar"/>
+					</div>
+				</form>
+			{% endif %}
 		</div>
-		{% if user.is_authenticated %}
-			<h4><strong>Deja un comentario:</strong></h4>
-			<form action="/addcomment/" method="Post">
-				{% csrf_token %}
-				<input name="title" type="text" value="Write a title" autocomplete="off"></input>
-				<textarea rows="3" cols="80" name="comment" type="text"> Escribe aqui... </textarea>
-				<input name="identifier" type="hidden" value="{{hotel.id}}"></input>
-				<input class="submitbutton" type="submit" value="Enviar"/>
-			</form>
-		{% endif %}
 </div>
 {% endblock %}

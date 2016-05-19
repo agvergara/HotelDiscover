@@ -19,9 +19,9 @@ import math
 
 def getlanguage(language, name):
 	if language == 'English':
-		url = 'http://www.esmadrid.com/opendata/alojamientos_v1_en.xml'
+		url = 'http://cursosweb.github.io/etc/alojamientos_en.xml'
 	elif language == 'French':
-		url = 'http://www.esmadrid.com/opendata/alojamientos_v1_fr.xml'
+		url = 'http://cursosweb.github.io/etc/alojamientos_fr.xml'
 	body = loadhotels(url, True, name)
 	return body
 
@@ -31,7 +31,7 @@ def getlanguage(language, name):
 def index(request):
 	hotel_list = []
 	user_list = []
-	url = 'http://www.esmadrid.com/opendata/alojamientos_v1_es.xml'
+	url = 'http://cursosweb.github.io/etc/alojamientos_es.xml'
 	hotels = Hotel.objects.all()
 	if not hotels:
 		loadhotels(url, False, "")

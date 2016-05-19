@@ -43,16 +43,17 @@
 					<a href="/alojamientos"><button class="buttonstyle"> Alojamientos </button></a>
 					<a href="/about"><button class="buttonstyle"> About </button></a>
 					{% if not user.is_authenticated %}
-							<a href="/register/"><button class="buttonstyle"> Registrate </button></a>
+							<a href="/register/"><button class="buttonstyle"> Regístrate </button></a>
 					{% endif %}
 					<a href="/main/xml"><button class="buttonstyle"> Main XML </button></a>
 					<a href="/main/rss"><button class="buttonstyle"> Main RSS </button></a>
 			</div>
 		</div>
 		<div class="wrapper">
-			
+
 			{% block content %}
 			{% endblock %}
 		</div>
+		<br/><br/>
 </body>
 </html>

@@ -5,7 +5,7 @@
 			<h1>
 				Lista 10 hoteles con mas comentarios
 			</h1>
-			<ol>
+			<ul class="mainlist">
 				{% for hotel, img in hotels %}
 					<div class="hotelwrp">
 						<li>
@@ -17,12 +17,13 @@
 								</div>
 								<img src="{{img}}" alt="" class="imgresize"><br/>
 							</item>
-						</li><hr><br/>
+						</li><br/><hr class="separator">
+
 					</div>
 					{% empty %}
 						<p> No hay hoteles con comentarios </p>
 					{% endfor %}
-			</ol>
+			</ul>
 		</div>
 		<div id="userpages">
 			<h2>

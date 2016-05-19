@@ -27,25 +27,30 @@ select {
     cursor:pointer;
 }
 
-ul {
+.mainlist{
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-ul li {
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list li {
   font: 50 14px/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
 }
 
-ul li:last-child {
+.list li:last-child {
   border: none;
 }
 
-ul li a {
+.list li a {
   text-decoration: none;
   color: #000;
-
   -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
   -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
   -o-transition: font-size 0.3s ease, background-color 0.3s ease;
@@ -55,7 +60,7 @@ ul li a {
   width: 200px;
 }
 
-ul li a:hover {
+.list li a:hover {
   font-size: 20px;
   background: #f6f6f6;
 }
@@ -75,9 +80,9 @@ input.submitbutton {
     font-size:1.1em;
     letter-spacing:.1em;
     font-variant:small-caps;
-    -webkit-border-radius: 0 15px 15px 0;
-    -moz-border-radius: 0 15px 15px 0;
-    border-radius: 0 15px 15px 0;
+    -webkit-border-radius: 15px 15px 15px 15px;
+    -moz-border-radius: 15px 15px 15px 15px;
+    border-radius: 15px 15px 15px 15px;
     -webkit-box-shadow: rgba(0, 0, 0, .75) 0 2px 6px;
     -moz-box-shadow: rgba(0, 0, 0, .75) 0 2px 6px;
     box-shadow: rgba(0, 0, 0, .75) 0 2px 6px;
@@ -89,7 +94,7 @@ input.submitbutton:hover, input.submitbutton:focus {
     box-shadow: rgba(0, 0, 0, .25) 0 1px 0px;
 }
 
-.content ol hr {
+.separator {
     border: 0;
     height: 1px;
     background: #333;
@@ -97,11 +102,11 @@ input.submitbutton:hover, input.submitbutton:focus {
 }
 
 .loginwrp input[type='submit'] {
-    padding:5px 15px; 
+    padding:5px 15px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     position: relative;
-    background:#ccc; 
+    background:#ccc;
     float: right;
     right: 1%;
     height: 28px;
@@ -138,7 +143,7 @@ input.submitbutton:hover, input.submitbutton:focus {
 
 .buttonstyle {
     padding: 10px 15px;
-    position: relative; 
+    position: relative;
     background: #000000;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -213,14 +218,14 @@ input.submitbutton:hover, input.submitbutton:focus {
   width: auto;
   position: relative;
   padding-top: 320px;
-  padding-left: 320px;
+  padding-left: 430px;
 }
 
 .slider > img{
   position: absolute;
   left: 0; top: 0;
   transition: all 0.5s;
-  padding-left: 310px;
+  padding-left: 370px;
 }
 
 .slider input[name='slide_switch'] {
@@ -253,6 +258,12 @@ input.submitbutton:hover, input.submitbutton:focus {
 .slider input[name='slide_switch']:checked+label+img {
   opacity: 1;
   transform: scale(1);
+}
+
+.content{
+  display: inline-block;
+  position: relative;
+  left: 10%;
 }
 
 #logged{
@@ -293,17 +304,12 @@ input.submitbutton:hover, input.submitbutton:focus {
   width: auto;
   display: inline-block;
   position: relative;
-  top: 30px;
+  padding-top: 200px;
+  padding-left: 550px;
 }
 
 #main{
   position: relative;
-}
-
-.content{
-  display: inline-block;
-  position: relative;
-  left: 10%;
 }
 
 #hotellist{
@@ -316,6 +322,7 @@ input.submitbutton:hover, input.submitbutton:focus {
 
 #hotelid{
   position: relative;
+  padding-left: 20px;
 }
 
 #hotelid h1{
@@ -353,4 +360,18 @@ input.submitbutton:hover, input.submitbutton:focus {
 
 #pages{
   font-size: 30px;
+}
+
+#comentarios{
+  position: relative;
+  padding-left: 20px;
+}
+
+#comentarios input[name="title"]{
+  display: inline-block;
+  vertical-align: top;
+}
+
+#name{
+  padding-left: 30px;
 }

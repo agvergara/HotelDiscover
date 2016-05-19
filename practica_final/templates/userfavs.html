@@ -12,7 +12,7 @@
 						<img src="{{img}}" alt=""><br/>
 						<a href="/alojamientos/{{hotel.id}}"><strong> Mas informacion </strong></a>
 					</item>
-				</li><br/>
+				</li><br/><hr class="separator">
 				<hr/>
 			{% empty %}
 				<p> Sorry, favs are empty </p>
@@ -20,7 +20,7 @@
 			<br/>
 			{% if num_favs > 10 %}
 				<div id="pages">
-					<strong>Pages:</strong>
+					<strong>Pagina:</strong>
 					{% for num in max_pg %}
 						<a href="/{{username}}_page={{num}}"><button>{{num}}</button></a>
 					{% endfor %}
@@ -31,7 +31,7 @@
 	<div id="personalize">
 		{% if user.is_authenticated %}
 			{% if username == user.username %}
-				<h4> Personalizatu pagina! </h4>
+				<h4> Personaliza tu pagina! </h4>
 				<form action="/saveconf/" method="Post">
 					{% csrf_token %}
 					<select name="color">
