@@ -16,8 +16,9 @@
 			<form action="" method="Post">
 				{% csrf_token %}
 				<select name="language">
+					<option value="Spanish">Español</option>
 					<option value="English">English</option>
-					<option value="French">French</option>
+					<option value="French">Français</option>
 				</select>
 				<input type="submit" value="Enviar"/>
 			</form>
@@ -28,8 +29,8 @@
 		<p> {{hotel.body}} </p>
 		<p> <strong>Category and stars:</strong> </p>
 		<p> {{hotel.category}}, {{hotel.stars}} </p>
-		<a href="{{hotel.web}}"> <strong>Web page</strong> </a><br/>
-		<p> Latitude: {{hotel.latitude}} ; Longitude: {{hotel.longitude}} </p>
+		<a href="{{hotel.web}}"> <strong>Web page</strong></a><br/>
+		<p> Latitude: {{hotel.latitude}} ; Longitude: {{hotel.longitude}}</p>
 		<h4 class="center"><strong> Imagenes:</strong></h4>
 		<div class="slider">
 			{% for img, num in img_list %}

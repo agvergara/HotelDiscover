@@ -22,6 +22,8 @@ def getlanguage(language, name):
 		url = 'http://cursosweb.github.io/etc/alojamientos_en.xml'
 	elif language == 'French':
 		url = 'http://cursosweb.github.io/etc/alojamientos_fr.xml'
+	elif language == 'Spanish':
+		url = 'http://cursosweb.github.io/etc/alojamientos_es.xml'
 	body = loadhotels(url, True, name)
 	return body
 
@@ -111,7 +113,12 @@ def hotel(request, identifier):
 	img_list = []
 	comment_list = []
 	language = ""
-	hotel = Hotel.objects.get(id=identifier)
+	try:
+		hotel = Hotel.objects.get(id=identifier)
+	except ObjectDoesNotExist:
+		template = get_template('notfound.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
 	images = Image.objects.get(hotel=hotel)
 	try:
 		language = request.POST.get('language')
@@ -224,6 +231,7 @@ def mainxml (request):
 	return HttpResponse(template.render(context), content_type="text/xml")
 
 # authenticate user!
+@csrf_exempt
 def auth(request):
 	username = strip_tags(request.POST.get('username'))
 	password = request.POST.get('password')
@@ -244,7 +252,7 @@ def register(request):
 		user = User(username=username, password=password)
 		user.save()
 		user = User.objects.get(username=username)
-		config = Config(user=user, title=title, color='beige', size=10)
+		config = Config(user=user, title=title, color='beige', size=14)
 		config.save()
 		return HttpResponseRedirect("/")
 
