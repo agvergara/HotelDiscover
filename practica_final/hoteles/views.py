@@ -48,7 +48,9 @@ def userpage(request, username):
 	try:
 		(hotel_list, user) = favourites(username, 0, 10)
 	except ObjectDoesNotExist:
-		return HttpResponse(username + " does not exist")
+		template = get_template('notfound.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
 	usr = User.objects.get(username=username)
 	(num_list, num_favs) = manypages(usr)
 	context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
@@ -66,7 +68,9 @@ def usernextpage(request, username, page):
 	try:
 		(hotel_list, user) = favourites(username, minpage, maxpage)
 	except ObjectDoesNotExist:
-		return HttpResponse("La has cagao")
+		template = get_template('notfound.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
 	usr = User.objects.get(username=username)
 	(num_list, num_favs) = manypages(usr)
 	template = get_template('userfavs.html')
