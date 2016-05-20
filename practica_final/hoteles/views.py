@@ -154,7 +154,9 @@ def userxml (request, user):
 	try:
 		user = User.objects.get(username=user)
 	except ObjectDoesNotExist:
-		return HttpResponse("Does not exists")
+		template = get_template('notfound.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))
 	favs = Favourite.objects.filter(user=user)
 	for fav in favs:
 		image = Image.objects.get(hotel=fav.hotel)
