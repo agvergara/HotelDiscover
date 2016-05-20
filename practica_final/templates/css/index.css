@@ -37,11 +37,13 @@ select {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  background-color: transparent;
+
 }
 
 .list li {
   font: 50 14px/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
+  background-color: transparent;
 }
 
 .list li:last-child {
@@ -57,26 +59,26 @@ select {
   -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
   transition: font-size 0.3s ease, background-color 0.3s ease;
   display: block;
-  width: 200px;
+  width: 300px;
 }
 
 .list li a:hover {
   font-size: 20px;
-  background: #f6f6f6;
+  background: transparent;
 }
 
 input.submitbutton {
-    border:2px groove #7c93ba;
+    border:2px groove #7C2529;
     cursor:pointer;
     padding: 5px 25px;
     background-color:#6b6dbb;
-    background: -webkit-gradient(linear, left top, left bottom, from(#88add7), to(#6b6dbb));
-    background: -webkit-linear-gradient(top, #88add7, #6b6dbb);
-    background: -moz-linear-gradient(top, #88add7, #6b6dbb);
-    background: -o-linear-gradient(top, #88add7, #6b6dbb);
-    background: linear-gradient(top, #88add7, #6b6dbb);
+    background: -webkit-gradient(linear, left top, left bottom, from(red), to(#7C2529));
+    background: -webkit-linear-gradient(top, red, #7C2529);
+    background: -moz-linear-gradient(top, red, #7C2529);
+    background: -o-linear-gradient(top, red, #7C2529);
+    background: linear-gradient(top, red, #7C2529);
     font-family:Andika, Arial, sans-serif;
-    color:#fff;
+    color: black;
     font-size:1.1em;
     letter-spacing:.1em;
     font-variant:small-caps;
@@ -123,8 +125,8 @@ input.submitbutton:hover, input.submitbutton:focus {
 }
 
 .banner {
-  height: 40px;
-  width: 80px;
+  height: 60px;
+  width: auto;   
   position: relative;
   display: inline-block;
 }
@@ -162,7 +164,7 @@ input.submitbutton:hover, input.submitbutton:focus {
 }
 
 .page-header a:link{
-  color:red;
+  color: red;
 }
 
 .page-header a:visited{
@@ -218,14 +220,14 @@ input.submitbutton:hover, input.submitbutton:focus {
   width: auto;
   position: relative;
   padding-top: 320px;
-  padding-left: 380px;
+  padding-left: 350px;
 }
 
 .slider > img{
   position: absolute;
   left: 0; top: 0;
   transition: all 0.5s;
-  padding-left: 370px;
+  padding-left: 340px;
 }
 
 .slider input[name='slide_switch'] {
@@ -260,10 +262,60 @@ input.submitbutton:hover, input.submitbutton:focus {
   transform: scale(1);
 }
 
+.moreinfo{
+  font-style: italic;
+  color: red;
+}
+
+.link{
+  color: red;
+}
+
+#hotel a span, .content item a span{
+  color: red;
+  font-size: 20px;
+}
+
 .content{
   display: inline-block;
+  vertical-align: top;
   position: relative;
-  left: 10%;
+  clear: both;
+  left: 7%;
+}
+
+#personalize{
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+  position: absolute;
+  float: right;
+  clear: both;
+  top: 10px;
+  padding-left: 900px;
+}
+
+#userpages{
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+  position: absolute;
+  float: right;
+  clear: both;
+  top: 10px;
+  padding-left: 340px;
+}
+
+#userfixed{
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+  position: absolute;
+  float: right;
+  clear: both;
+  top: 10px;
+  padding-left: 1004px;
+
 }
 
 #logged{
@@ -342,22 +394,6 @@ input.submitbutton:hover, input.submitbutton:focus {
   left: 10%;
 }
 
-#userpages{
-  display: inline-block;
-  vertical-align: top;
-  position: relative;
-  float: right;
-  padding-right: 30px;
-}
-
-#personalize{
-  display: inline-block;
-  vertical-align: top;
-  position: relative;
-  float: right;
-  padding-right: 10px;
-}
-
 #pages{
   font-size: 30px;
 }
@@ -374,4 +410,39 @@ input.submitbutton:hover, input.submitbutton:focus {
 
 #name{
   padding-left: 30px;
+}
+
+#notfound{
+  position: relative;
+}
+
+
+#credits {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 5.5px;
+  background: #000000;
+  color: #fff;
+  height: auto;
+  clear:both
+}
+
+#credits a {
+  color: red;
+}
+
+#mapdiv { 
+  height: 538px;
+}
+
+#discover{
+  position: relative;
+  height: 300px;
+  width: auto;
+  float: right;
+  padding-right: 20px;
+  clear: both;
+  bottom: 0%;
+  overflow: hidden;
 }

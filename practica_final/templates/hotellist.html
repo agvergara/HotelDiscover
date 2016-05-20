@@ -34,9 +34,11 @@
 		<ul class="list"><br/>
 		{% for hotel, id in hotel_list %}
 			<li>
-				<a href="/alojamientos/{{id}}"><strong>{{hotel}}</strong></a>
+				<center><a href="/alojamientos/{{id}}"><strong>{{hotel}}</strong></a></center>
+				<hr class="separator">
 			</li>
 		{% endfor %}
 		</ul>
+		<br/>
 	</div>
 {% endblock %}

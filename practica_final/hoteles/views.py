@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login
 from loaddata import loadhotels, orderbycomments, orderbycategory, favourites, manypages
 from django.db.models import Count
 import math
+import random
 # Create your views here.
 
 #Functions to return some lists
@@ -35,12 +36,17 @@ def index(request):
 	user_list = []
 	url = 'http://cursosweb.github.io/etc/alojamientos_es.xml'
 	hotels = Hotel.objects.all()
+	allhotels = Hotel.objects.all().order_by('id')
+	minimum = allhotels[0].id
+	allhotels = allhotels.reverse()
+	maximum = allhotels[0].id
+	randomhotel = int(random.uniform(minimum, maximum))
 	if not hotels:
 		loadhotels(url, False, "")
 	(hotel_list, user_list) = orderbycomments()
 	#Getting templates
 	template = get_template('index.html')
-	context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list})
+	context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list, 'random' : randomhotel})
 	return HttpResponse(template.render(context))
 
 # Page of an user
@@ -264,4 +270,16 @@ def mainrss(request):
 	template = get_template('rss/indexrss.rss')
 	context = RequestContext(request, {'hotels' : hotel_list, 'ip' : ip,
 										'users' : user_list})
+	return HttpResponse(template.render(context))
+
+def showmap(request, identifier):
+	try:
+		hotel = Hotel.objects.get(id=identifier)
+		print hotel
+	except ObjectDoesNotExist:
+		template = get_template('notfound.html')
+		context = RequestContext(request)
+		return HttpResponse(template.render(context))	
+	template = get_template('map.html')
+	context = RequestContext(request, {'lon' : hotel.longitude, 'lat' : hotel.latitude, 'name':hotel.name})
 	return HttpResponse(template.render(context))

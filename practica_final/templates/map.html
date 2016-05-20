@@ -1,0 +1,71 @@
+{% load staticfiles %}
+<html>
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/index.css" />
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+</head>
+<body>
+  <title>
+    Hotel Discover
+  </title>
+    <div class="page-header">
+      <div class="loginwrp">
+        {% if user.is_authenticated %}
+        <div id="logged">
+          <h4>Bienvenido {{user.username}}</h4>
+          <a href="/{{user.username}}"><button class="buttonstyle"><span>Mi Pagina</span></button></a>
+          <a href="/{{user.username}}/xml"><button class="buttonstyle">XML</button></a>
+          <a href="/logout/"><button class="buttonstyle">Logout</button></a>
+        </div>
+        {% else %}
+          <form action="/login/" method="Post">
+            {% csrf_token %}
+            <div id="login">
+              <label for="username">Name</label>
+              <input name="username" type="text" value="" class="resize" autocomplete="off"/>
+            </div>
+            <div id="passwd">
+              <label for="username">Password</label>
+              <input name="password" type="password" value="" class="resize"/>
+            </div>
+              <input type="submit" value="Login"/>
+          </form>
+        {% endif %}
+      </div>
+      <a href="/"><img src="{% static "images/HotelDiscoverLogo.png" %}" alt="Logo" class="banner"/></a>
+      <div class="urls">
+          {% if request.path != '/' %}
+              <a href="/"><button class="buttonstyle">Principal</button></a>
+          {% endif %}
+          <a href="/alojamientos"><button class="buttonstyle"> Alojamientos </button></a>
+          <a href="/about"><button class="buttonstyle"> About </button></a>
+          {% if not user.is_authenticated %}
+              <a href="/register/"><button class="buttonstyle"> Regístrate </button></a>
+          {% endif %}
+          <a href="/main/xml"><button class="buttonstyle"> Main XML </button></a>
+          <a href="/main/rss"><button class="buttonstyle"> Main RSS </button></a>
+      </div>
+    </div>
+    <div id="mapdiv"></div>
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script>
+      var mymap = L.map('mapdiv').setView([{{lat}}, {{lon}}], 16);
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 30,
+        id: 'anthyc.0634gham',
+        accessToken: 'pk.eyJ1IjoiYW50aHljIiwiYSI6ImNpb2Vtb29sYzAwMzF2Z2x4NDYzOGpodWoifQ.AnY_2VGSFnYMMQ_tTQ_tNQ'
+      }).addTo(mymap);
+      var marker = L.marker([{{lat}}, {{lon}}]).addTo(mymap);
+      marker.bindPopup("<b>{{name}}</b>").openPopup(); 
+    </script>
+    <footer>
+      <div id="credits">
+        <center><p><a href="/">Homepage</a> | <a href="/main/rss">RSS</a> | <a href="/main/xml">XML</a> | &copy; 2016 | Design by <a href="/about">Antonio Gomez Vergara</a> | This work is licensed under a <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a></p></center>
+      </div>
+    </footer>
+</body>
+</html>

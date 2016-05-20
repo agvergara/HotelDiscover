@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^addfav/$', 'hoteles.views.addfav'),
     url(r'^register/$','hoteles.views.register'),
     url(r'^about$', 'hoteles.views.about'),
+    url(r'^map/(\d+)$', 'hoteles.views.showmap'),
     url(r'^css/index.css$', 'hoteles.views.servecss'),
     url(r'^(.*)$', 'hoteles.views.userpage'),
 ]

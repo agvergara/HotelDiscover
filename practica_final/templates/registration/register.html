@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
 <head>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
 	<link rel="stylesheet" type="text/css" href="/css/index.css" />
 </head>
 <body>
@@ -10,9 +12,7 @@
 		Hotel Discover
 	</title>
 	<div class="page-header">
-		<div class="banner">
-			Banner.jpg
-		</div>
+		<a href="/"><img src="{% static "images/HotelDiscoverLogo.png" %}" alt="Logo" class="banner"/></a>
 		<div class="urls">
 			{% if request.path != '/' %}
 				<a href="/"><button class="buttonstyle">Main Page</button></a>
@@ -43,5 +43,14 @@
 				<center><input class="submitbutton" type="submit" value="Register"/></center>
 	  </form>
 	</div>
+	<br/><br/>
+	<br/><br/>
+	<br/><br/>
+	<br/><br/>
+	<footer>
+		<div id="credits">
+			<center><p><a href="/">Homepage</a> | <a href="/main/rss">RSS</a> | <a href="/main/xml">XML</a> | &copy; 2016 | Design by <a href="/about">Antonio Gomez Vergara</a> | This work is licensed under a <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a></p></center>
+		</div>
+	</footer>
 </body>
 </html>

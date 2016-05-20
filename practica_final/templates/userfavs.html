@@ -2,20 +2,19 @@
 
 {% block content %}
 	<div class="content">
-		<ol>
+		<ul class="mainlist">
 			{% for hotel, img, date in hotels %}
 				<li>
 					<item>
-						<a href="{{hotel.web}}"><strong> {{hotel.name}} </strong></a><br/>
+						<a href="{{hotel.web}}"><strong><span> {{hotel.name}} </span></strong></a><br/>
 						<strong>Added: </strong>{{date}}
 						<p><strong> Address : </strong>Calle {{hotel.address}} </p>
 						<img src="{{img}}" alt=""><br/>
-						<a href="/alojamientos/{{hotel.id}}"><strong> Mas informacion </strong></a>
+						<a href="/alojamientos/{{hotel.id}}"><strong class="moreinfo"> Mas informacion </strong></a>
 					</item>
 				</li><br/><hr class="separator">
-				<hr/>
 			{% empty %}
-				<p> Sorry, favs are empty </p>
+				<p> No tienes favoritos =( </p>
 			{% endfor %}
 			<br/>
 			{% if num_favs > 10 %}
@@ -26,7 +25,7 @@
 					{% endfor %}
 				</div>
 			{% endif %}
-		</ol>
+		</ul>
 	</div>
 	<div id="personalize">
 		{% if user.is_authenticated %}
@@ -35,7 +34,7 @@
 				<form action="/saveconf/" method="Post">
 					{% csrf_token %}
 					<select name="color">
-						<option value="beige">Default</option>
+						<option value="#D7C4B7">Default</option>
 						<option value="black">Black</option>
 						<option value="white">White</option>
 						<option value="aqua">Aqua</option>

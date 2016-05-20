@@ -29,10 +29,12 @@
 		<p> {{hotel.body}} </p>
 		<p> <strong>Category and stars:</strong> </p>
 		<p> {{hotel.category}}, {{hotel.stars}} </p>
-		<a href="{{hotel.web}}"> <strong>Web page</strong></a><br/>
-		<p> Latitude: {{hotel.latitude}} ; Longitude: {{hotel.longitude}}</p>
+		<a href="{{hotel.web}}"> <strong class="link">Página externa</strong></a><br/>
+		<p>
+			<a href="/map/{{hotel.id}}"><strong class="link">Ubicación: latitud: {{hotel.latitude}} ; longitud: {{hotel.longitude}}</strong></a>
+		</p>
 		<h4 class="center"><strong> Imagenes:</strong></h4>
-		<div class="slider">
+		<center><div class="slider">
 			{% for img, num in img_list %}
 				<input type="radio" name="slide_switch" id="id{{num}}" checked="checked"/>
 				<label for="id{{num}}">
@@ -40,7 +42,7 @@
 				</label>
 				<img src="{{img}}" alt="" />
 			{% endfor %}
-		</div>
+		</div></center>
 		<br/><br/><br/><br/><br/>
 		<hr class="separator">
 		<div id="comentarios">
@@ -67,5 +69,6 @@
 				</form>
 			{% endif %}
 		</div>
+		
 </div>
 {% endblock %}

@@ -1,7 +1,6 @@
 {% extends "base_index.html" %}
 
 {% block content %}
-  <div>
-    not found
-  </div>
+	{% load staticfiles %}
+    <center><img src="{% static "images/404.png" %}" alt="Not Found"/></center>
 {% endblock %}
