@@ -1,4 +1,4 @@
-#!/usr/bin/python
+º#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 #XML Parser given an url

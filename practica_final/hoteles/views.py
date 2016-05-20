@@ -252,7 +252,7 @@ def register(request):
 		context = RequestContext(request, {})
 		return HttpResponse(template.render(context))
 	elif request.method == "POST":
-		username = request.POST.get('username')
+		username = strip_tags(request.POST.get('username'))
 		password = make_password(request.POST.get('password'))
 		title = "Pagina de " + username
 		user = User(username=username, password=password)
