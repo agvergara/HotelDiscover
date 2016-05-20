@@ -437,6 +437,7 @@ input.submitbutton:hover, input.submitbutton:focus {
 }
 
 #discover{
+  display: inline-block;
   position: relative;
   height: 300px;
   width: auto;

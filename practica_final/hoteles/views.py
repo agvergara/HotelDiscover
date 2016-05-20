@@ -275,7 +275,6 @@ def mainrss(request):
 def showmap(request, identifier):
 	try:
 		hotel = Hotel.objects.get(id=identifier)
-		print hotel
 	except ObjectDoesNotExist:
 		template = get_template('notfound.html')
 		context = RequestContext(request)

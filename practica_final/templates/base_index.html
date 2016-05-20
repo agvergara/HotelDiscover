@@ -54,10 +54,10 @@
 			{% endblock %}
 		</div>
 		<br/><br/>
+		{% if request.path == '/' %}
+			<a href="/alojamientos/{{random}}"><img src="static/images/Click.png" alt="Discover" id="discover"/></a>
+		{% endif %}
 		<footer>
-			{% if request.path == '/' %}
-				<a href="/alojamientos/{{random}}"><img src="static/images/Click.png" alt="Discover" id="discover"/></a>
-			{% endif %}
 			<div id="credits">
 				<center><p><a href="/">Homepage</a> | <a href="/main/rss">RSS</a> | <a href="/main/xml">XML</a> | &copy; 2016 | Design by <a href="/about">Antonio Gomez Vergara</a> | This work is licensed under a <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a></p></center>
 			</div>
