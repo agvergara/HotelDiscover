@@ -126,7 +126,7 @@ input.submitbutton:hover, input.submitbutton:focus {
 
 .banner {
   height: 60px;
-  width: auto;   
+  width: auto;
   position: relative;
   display: inline-block;
 }
@@ -284,18 +284,7 @@ input.submitbutton:hover, input.submitbutton:focus {
   left: 7%;
 }
 
-#personalize{
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: top;
-  position: absolute;
-  float: right;
-  clear: both;
-  top: 10px;
-  padding-left: 900px;
-}
-
-#userpages{
+.userpages{
   overflow: hidden;
   display: inline-block;
   vertical-align: top;
@@ -420,6 +409,7 @@ input.submitbutton:hover, input.submitbutton:focus {
 #credits {
   position: relative;
   overflow: hidden;
+  bottom: 0;
   width: 100%;
   padding: 5.5px;
   background: #000000;
@@ -432,7 +422,7 @@ input.submitbutton:hover, input.submitbutton:focus {
   color: red;
 }
 
-#mapdiv { 
+#mapdiv {
   height: 538px;
 }
 

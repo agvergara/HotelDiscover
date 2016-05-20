@@ -14,7 +14,7 @@
 					</item>
 				</li><br/><hr class="separator">
 			{% empty %}
-				<p> No tienes favoritos =( </p>
+				<p><center> No tienes favoritos =( </center></p>
 			{% endfor %}
 			<br/>
 			{% if num_favs > 10 %}
@@ -27,7 +27,7 @@
 			{% endif %}
 		</ul>
 	</div>
-	<div id="personalize">
+	<div class="userpages">
 		{% if user.is_authenticated %}
 			{% if username == user.username %}
 				<h4> Personaliza tu pagina! </h4>
@@ -43,6 +43,8 @@
 						<option value="red">Red</option>
 						<option value="green">Green</option>
 						<option value="orange">Orange</option>
+						<option value="beige">Beige</option>
+						<option value="pink">Pink</option>
 					</select>
 					<select name="size">
 						<option value="14">Default</option>
@@ -57,4 +59,7 @@
 			{% endif %}
 	{% endif %}
 	</div>
+	<br/><br/>
+	<br/><br/>
+	<br/><br/>
 {% endblock %}

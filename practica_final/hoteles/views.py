@@ -213,7 +213,7 @@ def about(request):
 
 #CSS serving here
 def servecss(request):
-	color = 'beige'
+	color = '#D7C4B7'
 	size = 14
 	template = get_template('css/index.css')
 	if request.user.is_authenticated():
@@ -258,7 +258,7 @@ def register(request):
 		user = User(username=username, password=password)
 		user.save()
 		user = User.objects.get(username=username)
-		config = Config(user=user, title=title, color='beige', size=14)
+		config = Config(user=user, title=title, color='#D7C4B7', size=14)
 		config.save()
 		return HttpResponseRedirect("/")
 
@@ -278,7 +278,7 @@ def showmap(request, identifier):
 	except ObjectDoesNotExist:
 		template = get_template('notfound.html')
 		context = RequestContext(request)
-		return HttpResponse(template.render(context))	
+		return HttpResponse(template.render(context))
 	template = get_template('map.html')
 	context = RequestContext(request, {'lon' : hotel.longitude, 'lat' : hotel.latitude, 'name':hotel.name})
 	return HttpResponse(template.render(context))

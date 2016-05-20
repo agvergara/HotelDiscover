@@ -25,20 +25,16 @@
 					{% endfor %}
 			</ul>
 		</div>
-		{% if user.is_authenticated %}
-			<div id="userpages">
-		{% else %}
-			<div id="userfixed">
-		{% endif %}
-			<h2>
-				Paginas de usuario:
-			</h2>
-			{% for user, config in users %}
-				<a href="/{{user.username}}"><strong class="link">{{config}}</strong></a>&nbsp;&nbsp;{{user.username}}<br/>
-			{% endfor %}
-			<br/>
-			<strong>Contador de visitas:</strong>
-			<br/>
-			<a href="/" title="Visitor Counter"><img src="http://counter5.freecounter.ovh/private/freecounterstat.php?c=5f2c30f42e014197c9ba900e57f84ef6" border="0" title="Visitor Counter" alt=""></a>
+			<div class="userpages">
+				<h2>
+					Paginas de usuario:
+				</h2>
+				{% for user, config in users %}
+					<a href="/{{user.username}}"><strong class="link">{{config}}</strong></a>&nbsp;&nbsp;{{user.username}}<br/>
+				{% endfor %}
+				<br/>
+				<strong>Contador de visitas:</strong>
+				<br/>
+				<a href="/" title="Visitor Counter"><img src="http://counter5.freecounter.ovh/private/freecounterstat.php?c=5f2c30f42e014197c9ba900e57f84ef6" border="0" title="Visitor Counter" alt=""></a>
 		</div>
 {% endblock %}
