@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.utils.html import strip_tags
 from models import Hotel, Image, Comment, Config, Favourite
 from django.contrib.auth.models import User
@@ -32,59 +32,71 @@ def getlanguage(language, name):
 
 # MAINNNNNNNNNNNNN
 def index(request):
-	hotel_list = []
-	user_list = []
-	url = 'http://cursosweb.github.io/etc/alojamientos_es.xml'
-	hotels = Hotel.objects.all()
-	allhotels = Hotel.objects.all().order_by('id')
-	minimum = allhotels[0].id
-	allhotels = allhotels.reverse()
-	maximum = allhotels[0].id
-	randomhotel = int(random.uniform(minimum, maximum))
-	if not hotels:
-		loadhotels(url, False, "")
-	(hotel_list, user_list) = orderbycomments()
-	#Getting templates
-	template = get_template('index.html')
-	context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list, 'random' : randomhotel})
-	return HttpResponse(template.render(context))
+	if request.method == "GET":
+		hotel_list = []
+		user_list = []
+		url = 'http://cursosweb.github.io/etc/alojamientos_es.xml'
+		hotels = Hotel.objects.all()
+		allhotels = Hotel.objects.all().order_by('id')
+		minimum = allhotels[0].id
+		allhotels = allhotels.reverse()
+		maximum = allhotels[0].id
+		randomhotel = int(random.uniform(minimum, maximum))
+		if not hotels:
+			loadhotels(url, False, "")
+		(hotel_list, user_list) = orderbycomments()
+		#Getting templates
+		template = get_template('index.html')
+		context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list, 'random' : randomhotel})
+		return HttpResponse(template.render(context))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 # Page of an user
 def userpage(request, username):
-	hotel_list = []
-	num_list = []
-	try:
-		(hotel_list, user) = favourites(username, 0, 10)
-	except ObjectDoesNotExist:
-		template = get_template('notfound.html')
-		context = RequestContext(request)
+	if request.method == "GET":
+		hotel_list = []
+		num_list = []
+		try:
+			(hotel_list, user) = favourites(username, 0, 10)
+		except ObjectDoesNotExist:
+			template = get_template('notfound.html')
+			context = RequestContext(request)
+			return HttpResponse(template.render(context))
+		usr = User.objects.get(username=username)
+		(num_list, num_favs) = manypages(usr)
+		context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
+											'num_favs' : num_favs, 'max_pg' : num_list})
+		template = get_template('userfavs.html')
 		return HttpResponse(template.render(context))
-	usr = User.objects.get(username=username)
-	(num_list, num_favs) = manypages(usr)
-	context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
-										'num_favs' : num_favs, 'max_pg' : num_list})
-	template = get_template('userfavs.html')
-	return HttpResponse(template.render(context))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 def usernextpage(request, username, page):
-	maxpage = 10 * int(page)
-	minpage = maxpage - 10
-	hotel_list = []
-	num_list = []
-	if page == "1":
-		return HttpResponseRedirect("/" + username)
-	try:
-		(hotel_list, user) = favourites(username, minpage, maxpage)
-	except ObjectDoesNotExist:
-		template = get_template('notfound.html')
-		context = RequestContext(request)
+	if request.method == "GET":
+		maxpage = 10 * int(page)
+		minpage = maxpage - 10
+		hotel_list = []
+		num_list = []
+		if page == "1":
+			return HttpResponseRedirect("/" + username)
+		try:
+			(hotel_list, user) = favourites(username, minpage, maxpage)
+		except ObjectDoesNotExist:
+			template = get_template('notfound.html')
+			context = RequestContext(request)
+			return HttpResponse(template.render(context))
+		usr = User.objects.get(username=username)
+		(num_list, num_favs) = manypages(usr)
+		template = get_template('userfavs.html')
+		context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
+											'num_favs' : num_favs, 'max_pg' : num_list})
 		return HttpResponse(template.render(context))
-	usr = User.objects.get(username=username)
-	(num_list, num_favs) = manypages(usr)
-	template = get_template('userfavs.html')
-	context = RequestContext(request, {'hotels' : hotel_list, 'username' : username,
-										'num_favs' : num_favs, 'max_pg' : num_list})
-	return HttpResponse(template.render(context))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 # All of the hotels!
 def hotellist(request):
@@ -156,7 +168,7 @@ def userxml (request, user):
 	except ObjectDoesNotExist:
 		template = get_template('notfound.html')
 		context = RequestContext(request)
-		return HttpResponse(template.render(context))
+		return HttpResponseNotFound(template.render(context))
 	favs = Favourite.objects.filter(user=user)
 	for fav in favs:
 		image = Image.objects.get(hotel=fav.hotel)
@@ -168,50 +180,66 @@ def userxml (request, user):
 
 #Config section!
 def saveconf(request):
-	user = request.user.username
-	color = request.POST.get('color')
-	size = request.POST.get('size')
-	if request.POST.get('title') is not None and request.POST.get('title') != "":
-		title = strip_tags(request.POST.get('title'))
+	if request.method == "POST":
+		user = request.user.username
+		color = request.POST.get('color')
+		size = request.POST.get('size')
+		if request.POST.get('title') is not None and request.POST.get('title') != "":
+			title = strip_tags(request.POST.get('title'))
+		else:
+			title = "Pagina de " + user
+		user = User.objects.get(username=user)
+		config = Config.objects.get(user=user)
+		config.color = color
+		config.size = size
+		config.title = title
+		config.save()
+		return HttpResponseRedirect("/")
 	else:
-		title = "Pagina de " + user
-	user = User.objects.get(username=user)
-	config = Config.objects.get(user=user)
-	config.color = color
-	config.size = size
-	config.title = title
-	config.save()
-	return HttpResponseRedirect("/")
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 #Comment section!
 def addcomment(request):
-	user = request.user.username
-	user = User.objects.get(username=user)
-	identifier = request.POST.get('identifier')
-	hotel = Hotel.objects.get(id=identifier)
-	title = strip_tags(request.POST.get('title'))
-	comment = strip_tags(request.POST.get('comment'))
-	savecomm = Comment(user=user, hotel=hotel, title=title, comment=comment)
-	savecomm.save()
-	return HttpResponseRedirect("/alojamientos/"+str(identifier))
+	if request.method == "POST":
+		user = request.user.username
+		user = User.objects.get(username=user)
+		identifier = request.POST.get('identifier')
+		hotel = Hotel.objects.get(id=identifier)
+		title = strip_tags(request.POST.get('title'))
+		comment = strip_tags(request.POST.get('comment'))
+		savecomm = Comment(user=user, hotel=hotel, title=title, comment=comment)
+		savecomm.save()
+		return HttpResponseRedirect("/alojamientos/"+str(identifier))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 #Add to the favs!
 def addfav (request):
-	identifier = request.POST.get('identifier')
-	user = request.user.username
-	hotel = Hotel.objects.get(id=identifier)
-	user = User.objects.get(username=user)
-	favourite = Favourite(user=user, hotel=hotel)
-	favourite.save()
-	return HttpResponseRedirect("/alojamientos/"+str(hotel.id))
+	if request.method == "POST":
+		identifier = request.POST.get('identifier')
+		user = request.user.username
+		hotel = Hotel.objects.get(id=identifier)
+		user = User.objects.get(username=user)
+		favourite = Favourite(user=user, hotel=hotel)
+		favourite.save()
+		return HttpResponseRedirect("/alojamientos/"+str(hotel.id))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 def about(request):
-	template = get_template('about.html')
-	user = request.user.username
-	if request.user.is_authenticated():
-		user = User.objects.get(username=user)
-	context = RequestContext(request, {'user' : user})
-	return HttpResponse(template.render(context))
+	if request.method == "GET":
+		template = get_template('about.html')
+		user = request.user.username
+		if request.user.is_authenticated():
+			user = User.objects.get(username=user)
+		context = RequestContext(request, {'user' : user})
+		return HttpResponse(template.render(context))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 #CSS serving here
 def servecss(request):
@@ -230,23 +258,31 @@ def servecss(request):
 # OPTIONAL HERE!
 # Main page xml channel
 def mainxml (request):
-	hotel_list = []
-	user_list = []
-	ip = "http://" + request.get_host()
-	(hotel_list, user_list) = orderbycomments()
-	template = get_template('xml/main_xml.xml')
-	context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list, 'ip' : ip})
-	return HttpResponse(template.render(context), content_type="text/xml")
+	if request.method == "GET":
+		hotel_list = []
+		user_list = []
+		ip = "http://" + request.get_host()
+		(hotel_list, user_list) = orderbycomments()
+		template = get_template('xml/main_xml.xml')
+		context = RequestContext(request, {'hotels' : hotel_list, 'users' : user_list, 'ip' : ip})
+		return HttpResponse(template.render(context), content_type="text/xml")
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 # authenticate user!
 @csrf_exempt
 def auth(request):
-	username = strip_tags(request.POST.get('username'))
-	password = request.POST.get('password')
-	user = authenticate(username=username, password=password)
-	if user is not None:
-		login(request, user)
-	return HttpResponseRedirect('/')
+	if request.method == "POST":
+		username = strip_tags(request.POST.get('username'))
+		password = request.POST.get('password')
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			login(request, user)
+		return HttpResponseRedirect('/')
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 def register(request):
 	if request.method == "GET":
@@ -263,24 +299,35 @@ def register(request):
 		config = Config(user=user, title=title, color='#D7C4B7', size=14)
 		config.save()
 		return HttpResponseRedirect("/")
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 def mainrss(request):
-	hotel_list = []
-	user_list = []
-	ip = request.get_host()
-	(hotel_list, user_list) = orderbycomments()
-	template = get_template('rss/indexrss.rss')
-	context = RequestContext(request, {'hotels' : hotel_list, 'ip' : ip,
-										'users' : user_list})
-	return HttpResponse(template.render(context))
+	if request.method == "GET":
+		hotel_list = []
+		user_list = []
+		ip = request.get_host()
+		(hotel_list, user_list) = orderbycomments()
+		template = get_template('rss/indexrss.rss')
+		context = RequestContext(request, {'hotels' : hotel_list, 'ip' : ip,
+											'users' : user_list})
+		return HttpResponse(template.render(context))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
 
 def showmap(request, identifier):
-	try:
-		hotel = Hotel.objects.get(id=identifier)
-	except ObjectDoesNotExist:
-		template = get_template('notfound.html')
-		context = RequestContext(request)
+	if request.method == "GET":
+		try:
+			hotel = Hotel.objects.get(id=identifier)
+		except ObjectDoesNotExist:
+			template = get_template('notfound.html')
+			context = RequestContext(request)
+			return HttpResponseNotFound(template.render(context))
+		template = get_template('map.html')
+		context = RequestContext(request, {'lon' : hotel.longitude, 'lat' : hotel.latitude, 'name':hotel.name})
 		return HttpResponse(template.render(context))
-	template = get_template('map.html')
-	context = RequestContext(request, {'lon' : hotel.longitude, 'lat' : hotel.latitude, 'name':hotel.name})
-	return HttpResponse(template.render(context))
+	else:
+		template = get_template('notfound.html')
+		return HttpResponseNotFound(template.render())
