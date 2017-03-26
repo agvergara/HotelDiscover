@@ -1,6 +1,6 @@
 # HotelDiscover
 
-#  Práctica hosteada, click __[>aquí<](NULL)__ (Enlace caído)
+###  Práctica hosteada, click __[>aquí<](NULL)__ (Enlace caído)
 (Acceder desde un navegador Firefox)
 
 # X-Serv-Practica-Hoteles
